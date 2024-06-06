@@ -20,14 +20,44 @@ const Gameboard = (function () {
             displayBoard}
 })();
 
+const playerO = (function(array) {
+    const win = () => {if (array = 
+    [['o','.','.'], ['.','o','.'], ['.','.','o']] ||
+    [['.','.','o'], ['.','o','.'], ['o','.','.']] ||
+    [['o','.','.'], ['o','.','.'], ['o','.','.']] ||
+    [['.','o','.'], ['.','o','.'], ['.','o','.']] ||
+    [['.','.','o'], ['.','.','o'], ['.','.','o']] ||
+    [['o','o','o'], ['.','.','.'], ['.','.','.']] ||
+    [['.','.','.'], ['o','o','o'], ['.','.','.']] ||
+    [['.','.','.'], ['.','.','.'], ['o','o','o']]) {
+        return true
+    }}
+    return {win}
+})();
+
+const playerX = (function(array) {
+    const win = () => {if (array = 
+    [['x','.','.'], ['.','x','.'], ['.','.','x']] ||
+    [['.','.','x'], ['.','x','.'], ['x','.','.']] ||
+    [['x','.','.'], ['x','.','.'], ['x','.','.']] ||
+    [['.','x','.'], ['.','x','.'], ['.','x','.']] ||
+    [['.','.','x'], ['.','.','x'], ['.','.','x']] ||
+    [['x','x','x'], ['.','.','.'], ['.','.','.']] ||
+    [['.','.','.'], ['x','x','x'], ['.','.','.']] ||
+    [['.','.','.'], ['.','.','.'], ['x','x','x']]) {
+        return true
+    }}
+    return {win}
+})();
+
 function player1(name) {
+    const {displayBoard} = Gameboard();
     return {name}
 }
 
 
-
-console.log(Gameboard.r1c1('x'))
-console.log(Gameboard.r1c2('o'))
+console.log(Gameboard.r1c1('o'))
 console.log(Gameboard.r2c2('o'))
+console.log(Gameboard.r3c3('o'))
 
-console.log(Gameboard.displayBoard())
+console.log(playerO.win(Gameboard.displayBoard()))
