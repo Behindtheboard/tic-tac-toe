@@ -1,5 +1,5 @@
 const Gameboard = (function () {
-    const gameBoardArray = [[], [], []];
+    const gameBoardArray = [['.','.','.'], ['.','.','.'], ['.','.','.']];
     const [rowOne, rowTwo, rowThree] = gameBoardArray;
 
     const r1c1 = (xo) => rowOne[0] = xo;
@@ -20,10 +20,14 @@ const Gameboard = (function () {
             displayBoard}
 })();
 
-console.log(Gameboard.r1c1('x'))
-
 function player1(name) {
     return {name}
 }
 
-console.log(Gameboard.gameBoardArray)
+
+
+console.log(Gameboard.r1c1('x'))
+console.log(Gameboard.r1c2('o'))
+console.log(Gameboard.r2c2('o'))
+
+console.log(Gameboard.displayBoard())
