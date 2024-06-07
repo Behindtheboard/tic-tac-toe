@@ -62,32 +62,55 @@ const winKey = (function() {
     return {win}
 })();
 
-const player1 = function(name) {
-    return {name}
+const player = function(name) {
+    let mark = ' ';
+    const chooseMark = (pick) => mark = `${pick}`;
+    const getMark = () => mark;
+    
+    const pickSquare = (square) => {};
+    return {name, mark, getMark, chooseMark, pickSquare};
 }
-const player2 = function(name) {
-    return {name}
-}
+
+const jason = player('jason');
+const hailey = player('hailey');
+console.log(jason);
+jason.chooseMark('x');
+console.log({mark: jason.getMark()});
+
+
+// const player2 = function(name) {
+//     (player1.mark1 === 'x') ? (mark2 = 'o') : (mark2 = 'x');
+//     return {name}
+// }
 
 const game = function() {
-    if (Gameboard.displayBoard().join().includes('.') === true) {
-        console.log('I win');
-    }
+    const board = Gameboard.displayBoard().join();
 
+    if (board === '.,.,.,.,.,.,.,.,.') {
+        console.log('Pick x or o');
+        
+    } else if (board.includes('.') === true) {
+        console.log('Pick a Square');
+        console.log(Gameboard.displayBoard());
+    } else if (winKey.win(board) === true) {
+        console.log("I win")
+    } else {
+        console.log('Its a draw')
+    }
 }
 
 game();
 
-console.log(Gameboard.displayBoard().join().includes('.'))
+// console.log(Gameboard.displayBoard().join().includes('.'))
 
-console.log(Gameboard.displayBoard())
+// console.log(Gameboard.displayBoard())
 
-console.log(Gameboard.r1c1('o'))
-console.log(Gameboard.r2c2('o'))
-console.log(Gameboard.r3c3('o'))
+// console.log(Gameboard.r1c1('o'))
+// console.log(Gameboard.r2c2('o'))
+// console.log(Gameboard.r3c3('o'))
 
-console.log(Gameboard.displayBoard())
+// console.log(Gameboard.displayBoard())
 
-console.log(winKey.win(Gameboard.displayBoard().join()))
+// console.log(winKey.win(Gameboard.displayBoard().join()))
 
-console.log(game())
+// console.log(game())
