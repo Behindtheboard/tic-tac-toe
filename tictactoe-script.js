@@ -24,49 +24,61 @@ const winKey = (function() {
     const win = (string) => {
         switch(string) {
             case 'o,.,.,.,o,.,.,.,o': 
-            return true;
+            case 'x,.,.,.,x,.,.,.,x': 
+                return true;
             break;
             case '.,.,o,.,o,.,o,.,.': 
-            return true;
+            case '.,.,x,.,x,.,x,.,.': 
+                return true;
             break;
             case 'o,.,.,o,.,.,o,.,.': 
-            return true;
+            case 'x,.,.,x,.,.,x,.,.': 
+                return true;
             break;
             case '.,o,.,.,o,.,.,o,.': 
-            return true;
+            case '.,x,.,.,x,.,.,x,.': 
+                return true;
             break;
             case '.,.,o,.,.,o,.,.,o': 
-            return true;
+            case '.,.,x,.,.,x,.,.,x': 
+                return true;
             break;
             case 'o,o,o,.,.,.,.,.,.': 
-            return true;
+            case 'x,x,x,.,.,.,.,.,.': 
+                return true;
             break;
             case '.,.,.,o,o,o,.,.,.': 
-            return true;
+            case '.,.,.,x,x,x,.,.,.': 
+                return true;
             break;
             case '.,.,.,.,.,.,o,o,o': 
-            return true;
+            case '.,.,.,.,.,.,x,x,x': 
+                return true;
             break;
+            default:
+                return false;
         }
     }
     return {win}
 })();
 
+const player1 = function(name) {
+    return {name}
+}
+const player2 = function(name) {
+    return {name}
+}
 
-const game = (function() {
-    const {r1c1, r1c2, r1c3, 
-        r2c1, r2c2, r2c3, 
-        r3c1, r3c2, r3c3,
-        displayBoard, gameBoardArray} = Gameboard();
-    const {win} = winKey();
-    
-    let currentBoard = () => gameBoardArray;
-    
-    return {r1c1, r1c2, r1c3, 
-        r2c1, r2c2, r2c3, 
-        r3c1, r3c2, r3c3,
-        displayBoard, win, currentBoard}
-});
+const game = function() {
+    if (Gameboard.displayBoard().join().includes('.') === true) {
+        console.log('I win');
+    }
+
+}
+
+game();
+
+console.log(Gameboard.displayBoard().join().includes('.'))
 
 console.log(Gameboard.displayBoard())
 
@@ -75,6 +87,7 @@ console.log(Gameboard.r2c2('o'))
 console.log(Gameboard.r3c3('o'))
 
 console.log(Gameboard.displayBoard())
-console.log(Gameboard.displayBoard().join())
 
-console.log(winKey.win(Gameboard.displayBoard()))
+console.log(winKey.win(Gameboard.displayBoard().join()))
+
+console.log(game())
