@@ -20,36 +20,36 @@ const Gameboard = (function () {
 const winKey = (function() {
     const win = (string) => {
         switch(string) {
-            case 'o, , , ,o, , , ,o': 
-            case 'x, , , ,x, , , ,x': 
+            case 'o,r1c2,r1c3,r2c1,o,r2c3,r3c1,r3c2,o': 
+            case 'x,r1c2,r1c3,r2c1,x,r2c3,r3c1,r3c2,x': 
                 return true;
             break;
-            case ' , ,o, ,o, ,o, , ': 
-            case ' , ,x, ,x, ,x, , ': 
+            case 'r1c1,r1c2,o,r2c1,o,r2c3,o,r3c2,r3c3': 
+            case 'r1c1,r1c2,x,r2c1,x,r2c3,x,r3c2,r3c3': 
                 return true;
             break;
-            case 'o, , ,o, , ,o, , ': 
-            case 'x, , ,x, , ,x, , ': 
+            case 'o,r1c2,r1c3,o,r2c2,r2c3,o,r3c2,r3c3': 
+            case 'x,r1c2,r1c3,x,r2c2,r2c3,x,r3c2,r3c3': 
                 return true;
             break;
-            case ' ,o, , ,o, , ,o, ': 
-            case ' ,x, , ,x, , ,x, ': 
+            case 'r1c1,o,r1c3,r2c1,o,r2c3,r3c1,o,r3c3': 
+            case 'r1c1,x,r1c3,r2c1,x,r2c3,r3c1,x,r3c3': 
                 return true;
             break;
-            case ' , ,o, , ,o, , ,o': 
-            case ' , ,x, , ,x, , ,x': 
+            case 'r1c1,r1c2,o,r2c1,r2c2,o,r3c1,r3c2,o': 
+            case 'r1c1,r1c2,x,r2c1,r2c2,x,r3c1,r3c2,x': 
                 return true;
             break;
-            case 'o,o,o, , , , , , ': 
-            case 'x,x,x, , , , , , ': 
+            case 'o,o,o,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3': 
+            case 'x,x,x,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3': 
                 return true;
             break;
-            case ' , , ,o,o,o, , , ': 
-            case ' , , ,x,x,x, , , ': 
+            case 'r1c1,r1c2,r1c3,o,o,o,r3c1,r3c2,r3c3': 
+            case 'r1c1,r1c2,r1c3,x,x,x,r3c1,r3c2,r3c3': 
                 return true;
             break;
-            case ' , , , , , ,o,o,o': 
-            case ' , , , , , ,x,x,x': 
+            case 'r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,o,o,o': 
+            case 'r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,x,x,x': 
                 return true;
             break;
             default:
@@ -118,7 +118,14 @@ const game = function() {
             i--;
         }
     }
+
+    const resetGame = () => {
+            const yesNo = prompt("do you want to play again? y or n")
+            yesNo === "y" ? game() : alert('bye')
+    }
 }
+
+
 
 game();
 
