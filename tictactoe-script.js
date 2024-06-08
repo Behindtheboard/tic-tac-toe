@@ -14,7 +14,7 @@ const Gameboard = (function () {
 
     const displayBoard = () => gameBoardArray;
 
-    return {rowOne, rowTwo, rowThree, displayBoard, pickSquare}
+    return {displayBoard, pickSquare}
 })();
 
 const winKey = (function() {
@@ -68,42 +68,55 @@ const player = function(name) {
 }
 
 const game = function() {
-    const {rowOne, rowTwo, rowThree, pickSquare, displayBoard} = Gameboard;
+    const {pickSquare, displayBoard} = Gameboard;
 
     const board = displayBoard().join();
     let playerX = "";
     let playerO = "";
 
+    let i = 1;
 
-    if (board === 'r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3') {
-        console.log("Let's play tic tac toe");
-        if (playerX === "") {
-            playerX = player(prompt("What's your name player X?"));
-            alert(playerX.name);
-            playerX.chooseMark('x');
-            alert(playerX.getMark())
-        } 
+    while(i > 0) {
+        if (displayBoard().join() === 'r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3') {
+            console.log("Let's play tic tac toe");
+            if (playerX === "") {
+                playerX = player(prompt("What's your name player X?"));
+                alert(playerX.name);
+                playerX.chooseMark('x');
+                alert(playerX.getMark())
+            } 
+    
+            if (playerO === "") {
+                playerO = player(prompt("What's your name player O?"));
+                alert(playerO.name);
+                playerO.chooseMark('o');
+                alert(playerO.getMark())
+            }
+    
+            let square = prompt(`${playerX.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
+            alert(square)
+            pickSquare(square, playerX.getMark());
+            alert(displayBoard())
 
-        if (playerO === "") {
-            playerO = player(prompt("What's your name player O?"));
-            alert(playerO.name);
-            playerO.chooseMark('o');
-            alert(playerO.getMark())
-        } 
-        
-        let square = prompt(`${playerX.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
+        } else if (displayBoard().join().includes('r') === true) {
+            
+            square = prompt(`${playerO.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
+            alert(square)
+            pickSquare(square, playerO.getMark());
+            alert(displayBoard());
 
-        alert(square)
-        pickSquare(square, playerX.getMark());
-        alert(displayBoard())
-
-    } else if (board.includes(' ') === true) {
-        console.log('Pick a Square' );
-        console.log(boardDisplay);
-    } else if (winKey.win(board) === true) {
-        console.log("I win")
-    } else {
-        console.log('Its a draw')
+            square = prompt(`${playerX.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
+            alert(square)
+            pickSquare(square, playerX.getMark());
+            alert(displayBoard())
+            
+        } else if (winKey.win(board) === true) {
+            console.log("I win")
+            i--;
+        } else {
+            console.log('Its a draw')
+            i--;
+        }
     }
 }
 
