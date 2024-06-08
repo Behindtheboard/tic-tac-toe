@@ -1,9 +1,7 @@
 const Gameboard = (function () {
-    const gameBoardArray = [['.','.','.'], ['.','.','.'], ['.','.','.']];
+    const gameBoardArray = [[' ',' ',' '], [' ',' ',' '], [' ',' ',' ']];
     const [rowOne, rowTwo, rowThree] = gameBoardArray;
-    const [r1c1, r1c2, r1c3] = rowOne;
-    const [r2c1, r2c2, r2c3] = rowTwo;
-    const [r3c1, r3c2, r3c3] = rowThree;
+   
 
     // const r1c1 = (xo) => rowOne[0] = xo;
     // const r1c2 = (xo) => rowOne[1] = xo;
@@ -15,9 +13,7 @@ const Gameboard = (function () {
     // const r3c2 = (xo) => rowThree[1] = xo;
     // const r3c3 = (xo) => rowThree[2] = xo;
 
-    const pickSquare = (square, mark) => square.splice(0, 1, mark);
-    pickSquare(r1c1, 'x');
-    console.log(gameBoardArray)
+    const pickSquare = (square, mark) => square = mark;
 
     const displayBoard = () => gameBoardArray;
 
@@ -30,36 +26,36 @@ const Gameboard = (function () {
 const winKey = (function() {
     const win = (string) => {
         switch(string) {
-            case 'o,.,.,.,o,.,.,.,o': 
-            case 'x,.,.,.,x,.,.,.,x': 
+            case 'o, , , ,o, , , ,o': 
+            case 'x, , , ,x, , , ,x': 
                 return true;
             break;
-            case '.,.,o,.,o,.,o,.,.': 
-            case '.,.,x,.,x,.,x,.,.': 
+            case ' , ,o, ,o, ,o, , ': 
+            case ' , ,x, ,x, ,x, , ': 
                 return true;
             break;
-            case 'o,.,.,o,.,.,o,.,.': 
-            case 'x,.,.,x,.,.,x,.,.': 
+            case 'o, , ,o, , ,o, , ': 
+            case 'x, , ,x, , ,x, , ': 
                 return true;
             break;
-            case '.,o,.,.,o,.,.,o,.': 
-            case '.,x,.,.,x,.,.,x,.': 
+            case ' ,o, , ,o, , ,o, ': 
+            case ' ,x, , ,x, , ,x, ': 
                 return true;
             break;
-            case '.,.,o,.,.,o,.,.,o': 
-            case '.,.,x,.,.,x,.,.,x': 
+            case ' , ,o, , ,o, , ,o': 
+            case ' , ,x, , ,x, , ,x': 
                 return true;
             break;
-            case 'o,o,o,.,.,.,.,.,.': 
-            case 'x,x,x,.,.,.,.,.,.': 
+            case 'o,o,o, , , , , , ': 
+            case 'x,x,x, , , , , , ': 
                 return true;
             break;
-            case '.,.,.,o,o,o,.,.,.': 
-            case '.,.,.,x,x,x,.,.,.': 
+            case ' , , ,o,o,o, , , ': 
+            case ' , , ,x,x,x, , , ': 
                 return true;
             break;
-            case '.,.,.,.,.,.,o,o,o': 
-            case '.,.,.,.,.,.,x,x,x': 
+            case ' , , , , , ,o,o,o': 
+            case ' , , , , , ,x,x,x': 
                 return true;
             break;
             default:
@@ -87,7 +83,7 @@ const game = function() {
         r2c1, r2c2, r2c3, 
         r3c1, r3c2, r3c3} = Gameboard;
 
-    if (board === '.,.,.,.,.,.,.,.,.') {
+    if (board === ' , , , , , , , , ') {
         console.log("Let's play tic tac toe");
         if (playerX === "") {
             playerX = player(prompt("What's your name player X?"));
@@ -107,7 +103,7 @@ const game = function() {
         Gameboard.pickSquare(square, playerX.getMark());
         alert(boardDisplay)
 
-    } else if (board.includes('.') === true) {
+    } else if (board.includes(' ') === true) {
         console.log('Pick a Square' );
         console.log(boardDisplay);
     } else if (winKey.win(board) === true) {
