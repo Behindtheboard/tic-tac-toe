@@ -70,13 +70,13 @@ const player = function(name) {
 const game = function() {
     const {pickSquare, displayBoard} = Gameboard;
 
-    const board = displayBoard().join();
     let playerX = "";
     let playerO = "";
 
     let i = 1;
 
     while(i > 0) {
+        console.log('hit')
         if (displayBoard().join() === 'r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3') {
             console.log("Let's play tic tac toe");
             if (playerX === "") {
@@ -100,6 +100,10 @@ const game = function() {
 
         } else if (displayBoard().join().includes('r') === true) {
             
+            if (winKey.win(displayBoard().join()) === true) {
+                console.log("I win")
+                i--;
+            } else {
             square = prompt(`${playerO.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
             alert(square)
             pickSquare(square, playerO.getMark());
@@ -108,11 +112,9 @@ const game = function() {
             square = prompt(`${playerX.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
             alert(square)
             pickSquare(square, playerX.getMark());
-            alert(displayBoard())
-            
-        } else if (winKey.win(board) === true) {
-            console.log("I win")
-            i--;
+            alert(displayBoard())  
+            }
+
         } else {
             console.log('Its a draw')
             i--;
@@ -123,11 +125,11 @@ const game = function() {
             const yesNo = prompt("do you want to play again? y or n")
             yesNo === "y" ? game() : alert('bye')
     }
+    return {resetGame}
 }
 
-
-
 game();
+game.resetGame();
 
 // console.log(Gameboard.displayBoard().join().includes('.'))
 
