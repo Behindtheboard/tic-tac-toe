@@ -207,15 +207,23 @@ input {
 #playerXname, #playerOname {
     margin: 10px;
     margin-bottom: 20px;
-    width: 155px;
+    width: 145px;
     text-align: center;
+}
+
+#gameboard-section {
+    display: flex;
+    justify-content: center;
 }
 
 #gameboard {
     display: grid;
-    grid-template-columns: 100px 20px 100px 20px 100px;
-    grid-template-rows: 100px 20px 100px 20px 100px;
+    grid-template-columns: 100px 10px 100px 10px 100px;
+    grid-template-rows: 100px 10px 100px 10px 100px;
     justify-content: center;
+    width: 320px;
+    height: 320px;
+    border: solid 10px black;
 }
 
 .square {
