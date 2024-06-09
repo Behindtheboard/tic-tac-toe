@@ -20,21 +20,21 @@ const Gameboard = (function () {
     }
 
     const win = () => {
-        if (rowOne[0] !== 'r1c1' && rowOne[1] !== 'r1c2' && rowOne[2] !== 'r1c3') {
+        if ((rowOne[0] == 'x' && rowOne[1] == 'x' && rowOne[2] == 'x') || (rowOne[0] == 'o' && rowOne[1] == 'o' && rowOne[2] == 'o')) {
             return true
-        } else if (rowTwo[0] !== 'r2c1' && rowTwo[1] !== 'r2c2' && rowTwo[2] !== 'r2c3') {
+        } else if ((rowTwo[0] == 'x' && rowTwo[1] == 'x' && rowTwo[2] == 'x') || (rowTwo[0] == 'o' && rowTwo[1] == 'o' && rowTwo[2] == 'o')) {
             return true
-        } else if (rowThree[0] !== 'r3c1' && rowThree[1] !== 'r3c2' && rowThree[2] !== 'r3c3') {
+        } else if ((rowThree[0] == 'x' && rowThree[1] == 'x' && rowThree[2] == 'x') || (rowThree[0] == 'o' && rowThree[1] == 'o' && rowThree[2] == 'o')) {
             return true
-        } else if (rowOne[0] !== 'r1c1' && rowTwo[0] !== 'r2c1' && rowThree[0] !== 'r3c1') {
+        } else if ((rowOne[0] == 'x' && rowTwo[0] == 'x' && rowThree[0] == 'x') || (rowOne[0] == 'o' && rowTwo[0] == 'o' && rowThree[0] == 'o')) {
             return true
-        } else if (rowOne[1] !== 'r1c2' && rowTwo[1] !== 'r2c2' && rowThree[1] !== 'r3c2') {
+        } else if ((rowOne[1] == 'x' && rowTwo[1] == 'x' && rowThree[1] == 'x') || (rowOne[1] == 'o' && rowTwo[1] == 'o' && rowThree[1] == 'o')) {
             return true
-        } else if (rowOne[2] !== 'r1c3' && rowTwo[2] !== 'r2c3' && rowThree[2] !== 'r3c3') {
+        } else if ((rowOne[2] == 'x' && rowTwo[2] == 'x' && rowThree[2] == 'x') || (rowOne[2] == 'o' && rowTwo[2] == 'o' && rowThree[2] == 'o')) {
             return true
-        } else if (rowOne[0] !== 'r1c1' && rowTwo[1] !== 'r2c2' && rowThree[2] !== 'r3c3') {
+        } else if ((rowOne[0] == 'x' && rowTwo[1] == 'x' && rowThree[2] == 'x') || (rowOne[0] == 'o' && rowTwo[1] == 'o' && rowThree[2] == 'o')) {
             return true
-        } else if (rowOne[2] !== 'r1c3' && rowTwo[1] !== 'r2c2' && rowThree[0] !== 'r3c1') {
+        } else if ((rowOne[2] == 'x' && rowTwo[1] == 'x' && rowThree[0] == 'x') || (rowOne[2] == 'o' && rowTwo[1] == 'o' && rowThree[0] == 'o')) {
             return true
         }
     }
@@ -46,59 +46,56 @@ const player = function(name) {
     let mark = ' ';
     const chooseMark = (pick) => mark = `${pick}`;
     const getMark = () => mark;
-    
+
     return {name, getMark, chooseMark};
 }
 
 const game = function() {
     const {pickSquare, displayBoard, win} = Gameboard;
-    let playerX = "";
-    let playerO = "";
+
+    let playerX;
+    let playerO;
+    
+
+    alert("let's play tic toe")
     alert(playerX)
+    
+    if (playerX === undefined) {
+        playerX = player(prompt("What's your name player X?"));
+        playerX.chooseMark('x');
+        alert(`${playerX.name}'s mark is 'x'`);
+    } 
 
+    if (playerO === undefined) {
+        playerO = player(prompt("What's your name player O?"));
+        playerO.chooseMark('o');
+        alert(`${playerO.name}'s mark is 'o'`);
+    }
+
+    let square = prompt(`${playerX.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
+    alert(`${playerX.name} chose ${square}`)
+    pickSquare(square, playerX.getMark());
+    alert(displayBoard());
+    
     let i = 1;
-
     while(i > 0) {
-        if (displayBoard().join() === 'r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3') {
-            console.log("Let's play tic tac toe");
-            if (playerX === "") {
-                playerX = player(prompt("What's your name player X?"));
-                alert(playerX.name);
-                playerX.chooseMark('x');
-                alert(playerX.getMark())
-            } 
-    
-            if (playerO === "") {
-                playerO = player(prompt("What's your name player O?"));
-                alert(playerO.name);
-                playerO.chooseMark('o');
-                alert(playerO.getMark())
-            }
-    
-            let square = prompt(`${playerX.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
-            alert(square)
-            pickSquare(square, playerX.getMark());
-            alert(displayBoard())
-
-        } else if (displayBoard().join().includes('r') === true) {
-            
+        if (displayBoard().join().includes('r') === true) {            
             if (win() === true) {
                 alert("I win")
                 i--;
             } else {
                 square = prompt(`${playerO.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
-                alert(square)
+                alert(`${playerO.name} chose ${square}`)
                 pickSquare(square, playerO.getMark());
                 alert(displayBoard());
 
                 square = prompt(`${playerX.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
-                alert(square)
+                alert(`${playerX.name} chose ${square}`)
                 pickSquare(square, playerX.getMark());
                 alert(displayBoard())  
             }
-
         } else {
-            console.log('Its a draw')
+            alert("It's a draw")
             i--;
         }
     }
@@ -106,9 +103,6 @@ const game = function() {
 
 const resetGame = () => {
     Gameboard.resetBoard()
-    
-    alert(Gameboard.displayBoard());
-
     const yesNo = prompt("do you want to play again? y or n")
     yesNo === "y" ? game() : alert('bye')
 };
