@@ -11,14 +11,14 @@ const Gameboard = (function () {
 
     const pickSquare = function(square, mark) {
         if (square.includes('r1') === true && rowOne.includes(square) === true) {
+            markSwitch()
             rowOne[rowOne.indexOf(square)] = mark;
-            markSwitch()
         } else if (square.includes('r2') === true && rowTwo.includes(square) === true) {
+            markSwitch()
             rowTwo[rowTwo.indexOf(square)] =  mark;
-            markSwitch()
         } else if (square.includes('r3') === true && rowThree.includes(square) === true) {
-            rowThree[rowThree.indexOf(square)] =  mark;
             markSwitch()
+            rowThree[rowThree.indexOf(square)] =  mark;
         } else {
             return false;
         }
@@ -57,7 +57,7 @@ const Gameboard = (function () {
 
     const getTick = () => tick;
 
-    return {displayBoard, pickSquare, winKey, resetBoard, markSwitch, getTick}
+    return {displayBoard, pickSquare, winKey, resetBoard, getTick}
 })();
 
 const player = function(name) {
@@ -84,16 +84,13 @@ const game = function(event) {
 }
 
 const selectSquare = function (event) {
-    const {pickSquare, markSwitch, getTick} = Gameboard;
+    const {pickSquare, getTick} = Gameboard;
 
     let xo;
 
     const createMark = (sq) => {
-        // const mark = document.createElement('div');
-        //     mark.setAttribute('class', 'mark')
             getTick() === 'x' ? xo = 'X' : xo = 'O'
             sq.textContent = xo;
-            // sq.appendChild(mark);
     }
 
     switch(event.target.id) {
@@ -102,36 +99,28 @@ const selectSquare = function (event) {
             pickSquare('r1c1', getTick()) === false ? alert('already used') : createMark(r1c1);
         break;
         case 'r1c2':
-            pickSquare('r1c2', getTick())
-            createMark(r1c2);
+            pickSquare('r1c2', getTick()) === false ? alert('already used') : createMark(r1c2);
         break;
         case 'r1c3':
-            pickSquare('r1c3', getTick())
-            createMark(r1c3);
+            pickSquare('r1c3', getTick()) === false ? alert('already used') : createMark(r1c3);
         break;
         case 'r2c1':
-            pickSquare('r2c1', getTick())
-            createMark(r2c1);
+            pickSquare('r2c1', getTick()) === false ? alert('already used') : createMark(r2c1);
         break;
         case 'r2c2':
-            pickSquare('r2c2', getTick())
-            createMark(r2c2);
+            pickSquare('r2c2', getTick()) === false ? alert('already used') : createMark(r2c2);
         break;
         case 'r2c3':
-            pickSquare('r2c3', getTick())
-            createMark(r2c3);
+            pickSquare('r2c3', getTick()) === false ? alert('already used') : createMark(r2c3);
         break;
         case 'r3c1':
-            pickSquare('r3c1', getTick())
-            createMark(r3c1);
+            pickSquare('r3c1', getTick()) === false ? alert('already used') : createMark(r3c1);
         break;
         case 'r3c2':
-            pickSquare('r3c2', getTick())
-            createMark(r3c2);
+            pickSquare('r3c2', getTick()) === false ? alert('already used') : createMark(r3c2);
         break;
         case 'r3c3':
-            pickSquare('r3c3', getTick())
-            createMark(r3c3);
+            pickSquare('r3c3', getTick()) === false ? alert('already used') : createMark(r3c3);
         break;
     }
 }

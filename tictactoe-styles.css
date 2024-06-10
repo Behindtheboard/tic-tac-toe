@@ -196,7 +196,7 @@ input {
     border: none;
 }
 
-#header, #playerInfo, #playerNames {
+#gameboard-section, #display-section, #header, #playerInfo, #playerNames {
     display: flex;
     justify-content: center;
 }
@@ -211,11 +211,6 @@ input {
     margin-bottom: 20px;
     width: 145px;
     text-align: center;
-}
-
-#gameboard-section {
-    display: flex;
-    justify-content: center;
 }
 
 #gameboard {
@@ -236,14 +231,18 @@ input {
     max-height: 110px;
     font-size: 100px;
 }
-/* 
-.mark {
-    max-height: 110px;
-    font-size: 100px;
-} */
 
 .bar {
     background-color: black;
+}
+
+#display {
+    height: 30px;
+    width: 200px;
+    background-color: lightgray;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    border: 3px dashed black;
 }
 
 #r1c1 {
