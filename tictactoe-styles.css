@@ -228,6 +228,10 @@ input {
 
 .square {
     background-color: lightgrey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 6rem;
 }
 
 .bar {

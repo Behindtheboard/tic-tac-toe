@@ -19,7 +19,7 @@ const Gameboard = (function () {
         }
     }
 
-    const win = () => {
+    const winKey = () => {
         if ((rowOne[0] == 'x' && rowOne[1] == 'x' && rowOne[2] == 'x') || (rowOne[0] == 'o' && rowOne[1] == 'o' && rowOne[2] == 'o')) {
             return true
         } else if ((rowTwo[0] == 'x' && rowTwo[1] == 'x' && rowTwo[2] == 'x') || (rowTwo[0] == 'o' && rowTwo[1] == 'o' && rowTwo[2] == 'o')) {
@@ -38,8 +38,21 @@ const Gameboard = (function () {
             return true
         }
     }
-    
-    return {displayBoard, pickSquare, win, resetBoard}
+
+    let tick;
+    const markSwitch = function() {
+        if (tick === undefined) {
+            tick = 'x';
+        } else if (tick === 'x') {
+            tick = 'o';
+        } else if (tick === 'o') {
+            tick = 'x';
+        }
+    }
+
+    const getTick = () => tick;
+
+    return {displayBoard, pickSquare, winKey, resetBoard, markSwitch, getTick}
 })();
 
 const player = function(name) {
@@ -48,58 +61,7 @@ const player = function(name) {
     const getMark = () => mark;
 
     return {name, getMark, chooseMark};
-}
-
-const game = function() {
-    const {pickSquare, displayBoard, win} = Gameboard;
-
-    let playerX;
-    let playerO;
-    
-
-    alert("let's play tic toe")
-    alert(playerX)
-    
-    if (playerX === undefined) {
-        playerX = player(prompt("What's your name player X?"));
-        playerX.chooseMark('x');
-        alert(`${playerX.name}'s mark is 'x'`);
-    } 
-
-    if (playerO === undefined) {
-        playerO = player(prompt("What's your name player O?"));
-        playerO.chooseMark('o');
-        alert(`${playerO.name}'s mark is 'o'`);
-    }
-
-    let square = prompt(`${playerX.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
-    alert(`${playerX.name} chose ${square}`)
-    pickSquare(square, playerX.getMark());
-    alert(displayBoard());
-    
-    let i = 1;
-    while(i > 0) {
-        if (displayBoard().join().includes('r') === true) {            
-            if (win() === true) {
-                alert("I win")
-                i--;
-            } else {
-                square = prompt(`${playerO.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
-                alert(`${playerO.name} chose ${square}`)
-                pickSquare(square, playerO.getMark());
-                alert(displayBoard());
-
-                square = prompt(`${playerX.name} Pick a Square. \n r1c1, r1c2, r1c3, \n r2c1, r2c2, r2c3, \n r3c1, r3c2, r3c3`)
-                alert(`${playerX.name} chose ${square}`)
-                pickSquare(square, playerX.getMark());
-                alert(displayBoard())  
-            }
-        } else {
-            alert("It's a draw")
-            i--;
-        }
-    }
-}
+};
 
 const resetGame = () => {
     Gameboard.resetBoard()
@@ -107,19 +69,78 @@ const resetGame = () => {
     yesNo === "y" ? game() : alert('bye')
 };
 
-game();
-resetGame();
+const game = function(event) {
 
-// console.log(Gameboard.displayBoard().join().includes('.'))
+    if (Gameboard.winKey() === true) {
+        alert(`${Gameboard.getTick()} wins!`)
+    } else {
+        selectSquare(event)
+    }
+}
 
-// console.log(Gameboard.displayBoard())
+const selectSquare = function (event) {
+    const {pickSquare, markSwitch, getTick} = Gameboard;
 
-// console.log(Gameboard.r1c1('o'))
-// console.log(Gameboard.r2c2('o'))
-// console.log(Gameboard.r3c3('o'))
+    markSwitch()
+    console.log(getTick())
+    switch(event.target.id) {
+        case 'r1c1':
+            pickSquare('r1c1', getTick())
+            r1c1.textContent = getTick();
+        break;
+        case 'r1c2':
+            pickSquare('r1c2', getTick())
+            r1c2.textContent = getTick();
+        break;
+        case 'r1c3':
+            pickSquare('r1c3', getTick())
+            r1c3.textContent = getTick();
+        break;
+        case 'r2c1':
+            pickSquare('r2c1', getTick())
+            r2c1.textContent = getTick();
+        break;
+        case 'r2c2':
+            pickSquare('r2c2', getTick())
+            r2c2.textContent = getTick();
+        break;
+        case 'r2c3':
+            pickSquare('r2c3', getTick())
+            r2c3.textContent = getTick();
+        break;
+        case 'r3c1':
+            pickSquare('r3c1', getTick())
+            r3c1.textContent = getTick();
+        break;
+        case 'r3c2':
+            pickSquare('r3c2', getTick())
+            r3c2.textContent = getTick();
+        break;
+        case 'r3c3':
+            pickSquare('r3c3', getTick())
+            r3c3.textContent = getTick();
+        break;
+    }
+}
 
-// console.log(Gameboard.displayBoard())
 
-// console.log(winKey.win(Gameboard.displayBoard().join()))
+const boardDom = document.querySelector('#gameboard');
 
-// console.log(game())
+const r1c1 = document.querySelector('#r1c1');
+const r1c2 = document.querySelector('#r1c2');
+const r1c3 = document.querySelector('#r1c3');
+const r2c1 = document.querySelector('#r2c1');
+const r2c2 = document.querySelector('#r2c2');
+const r2c3 = document.querySelector('#r2c3');
+const r3c1 = document.querySelector('#r3c1');
+const r3c2 = document.querySelector('#r3c2');
+const r3c3 = document.querySelector('#r3c3');
+
+boardDom.addEventListener('click', (event) =>{
+    if (Gameboard.displayBoard().join().includes('r') === true) {
+        selectSquare(event);
+    }
+    if (Gameboard.winKey() === true) {
+        alert(`${Gameboard.getTick()} wins!`)
+    } 
+});
