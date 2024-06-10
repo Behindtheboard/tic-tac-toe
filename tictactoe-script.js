@@ -10,12 +10,17 @@ const Gameboard = (function () {
     }
 
     const pickSquare = function(square, mark) {
-        if (square.includes('r1') === true) {
+        if (square.includes('r1') === true && rowOne.includes(square) === true) {
             rowOne[rowOne.indexOf(square)] = mark;
-        } else if (square.includes('r2') === true) {
+            markSwitch()
+        } else if (square.includes('r2') === true && rowTwo.includes(square) === true) {
             rowTwo[rowTwo.indexOf(square)] =  mark;
-        } else if (square.includes('r3') === true) {
+            markSwitch()
+        } else if (square.includes('r3') === true && rowThree.includes(square) === true) {
             rowThree[rowThree.indexOf(square)] =  mark;
+            markSwitch()
+        } else {
+            return false;
         }
     }
 
@@ -84,20 +89,17 @@ const selectSquare = function (event) {
     let xo;
 
     const createMark = (sq) => {
-        const mark = document.createElement('div');
-            mark.setAttribute('class', 'mark')
+        // const mark = document.createElement('div');
+        //     mark.setAttribute('class', 'mark')
             getTick() === 'x' ? xo = 'X' : xo = 'O'
-            mark.textContent = xo;
-            sq.appendChild(mark);
+            sq.textContent = xo;
+            // sq.appendChild(mark);
     }
-
-    markSwitch()
 
     switch(event.target.id) {
         
         case 'r1c1':
-            pickSquare('r1c1', getTick())
-            createMark(r1c1);
+            pickSquare('r1c1', getTick()) === false ? alert('already used') : createMark(r1c1);
         break;
         case 'r1c2':
             pickSquare('r1c2', getTick())
