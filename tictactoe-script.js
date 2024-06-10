@@ -81,50 +81,62 @@ const game = function(event) {
 const selectSquare = function (event) {
     const {pickSquare, markSwitch, getTick} = Gameboard;
 
+    let xo;
+
+    const createMark = (sq) => {
+        const mark = document.createElement('div');
+            mark.setAttribute('class', 'mark')
+            getTick() === 'x' ? xo = 'X' : xo = 'O'
+            mark.textContent = xo;
+            sq.appendChild(mark);
+    }
+
     markSwitch()
-    console.log(getTick())
+
     switch(event.target.id) {
+        
         case 'r1c1':
             pickSquare('r1c1', getTick())
-            r1c1.textContent = getTick();
+            createMark(r1c1);
         break;
         case 'r1c2':
             pickSquare('r1c2', getTick())
-            r1c2.textContent = getTick();
+            createMark(r1c2);
         break;
         case 'r1c3':
             pickSquare('r1c3', getTick())
-            r1c3.textContent = getTick();
+            createMark(r1c3);
         break;
         case 'r2c1':
             pickSquare('r2c1', getTick())
-            r2c1.textContent = getTick();
+            createMark(r2c1);
         break;
         case 'r2c2':
             pickSquare('r2c2', getTick())
-            r2c2.textContent = getTick();
+            createMark(r2c2);
         break;
         case 'r2c3':
             pickSquare('r2c3', getTick())
-            r2c3.textContent = getTick();
+            createMark(r2c3);
         break;
         case 'r3c1':
             pickSquare('r3c1', getTick())
-            r3c1.textContent = getTick();
+            createMark(r3c1);
         break;
         case 'r3c2':
             pickSquare('r3c2', getTick())
-            r3c2.textContent = getTick();
+            createMark(r3c2);
         break;
         case 'r3c3':
             pickSquare('r3c3', getTick())
-            r3c3.textContent = getTick();
+            createMark(r3c3);
         break;
     }
 }
 
 
 const boardDom = document.querySelector('#gameboard');
+const square = document.querySelector('.square')
 
 const r1c1 = document.querySelector('#r1c1');
 const r1c2 = document.querySelector('#r1c2');

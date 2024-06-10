@@ -231,7 +231,11 @@ input {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 6rem;
+}
+
+.mark {
+    max-height: 60px;
+    font-size: 50px;
 }
 
 .bar {
