@@ -65,8 +65,7 @@ const player = function(name) {
 
 const resetGame = () => {
     Gameboard.resetBoard()
-    const yesNo = prompt("do you want to play again? y or n")
-    yesNo === "y" ? game() : alert('bye')
+    game();
 };
 
 
@@ -116,10 +115,10 @@ const selectSquare = function (event) {
     }
 }
 
-const game = function(event) {
-
+const game = function() {
+    const {displayBoard, winKey, markSwitch, getTick} = Gameboard;
+    
     const boardDom = document.querySelector('#gameboard');
-    const square = document.querySelector('.square')
     const display = document.querySelector('#display')
 
     const r1c1 = document.querySelector('#r1c1');
@@ -132,17 +131,18 @@ const game = function(event) {
     const r3c2 = document.querySelector('#r3c2');
     const r3c3 = document.querySelector('#r3c3');
 
-    boardDom.addEventListener('click', (event) =>{
-        const {displayBoard, winKey, markSwitch, getTick} = Gameboard;
-        if (winKey() === true) {
-        } else if (displayBoard().join().includes('r') === true) {
+    boardDom.addEventListener('click', (event) => {
+        if (winKey() !== true) {
+            console.log('hit')
             selectSquare(event);
-        }
+            if (winKey() === true) {
+                markSwitch();
+                display.textContent = `${getTick() === 'x' ? xo = 'X' : xo = 'O'} wins!`;
+                
+            }
+        }   
     });
 
-    if (Gameboard.winKey() === true) {
-        display.textContent = `${getTick() === 'x' ? xo = 'X' : xo = 'O'} wins!`;
-    }
 }
 
 game();
