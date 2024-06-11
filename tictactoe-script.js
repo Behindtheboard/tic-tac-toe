@@ -1,3 +1,5 @@
+// if you ever come back to this. change the gameboardarray to be ' ', not by r1c1, r1c2...
+
 const Gameboard = (function () {
     const gameBoardArray = [['r1c1','r1c2','r1c3'], ['r2c1','r2c2','r2c3'], ['r3c1','r3c2','r3c3']];
     let [rowOne, rowTwo, rowThree] = gameBoardArray;
@@ -17,13 +19,10 @@ const Gameboard = (function () {
     
     const pickSquare = function(square, mark) {
         if (square.includes('r1') === true && rowOne.includes(square) === true) {
-            console.log('hit1')
             rowOne[rowOne.indexOf(square)] = mark;
         } else if (square.includes('r2') === true && rowTwo.includes(square) === true) {
-            console.log('hit1')
             rowTwo[rowTwo.indexOf(square)] =  mark;
         } else if (square.includes('r3') === true && rowThree.includes(square) === true) {
-            console.log('hit1')
             rowThree[rowThree.indexOf(square)] =  mark;
         }
     }
@@ -70,12 +69,8 @@ const Gameboard = (function () {
     }
     const getTick = () => tick;
 
-    let cacheReset = 0;
-    const addCacheReset = () => ++cacheReset;
-    const getCache = () => cacheReset;
-
     return {displayBoard, pickSquare, winKey, resetBoard, getTick, 
-        markSwitch, addCacheReset, getCache, squareCheck}
+        markSwitch, squareCheck}
 })();
 
 const selectSquare = function (event) {
@@ -84,11 +79,13 @@ const selectSquare = function (event) {
     let xo;
 
     const createMark = (sq) => {
-            getTick() === 'x' ? xo = 'X' : xo = 'O'
+            getTick() === 'x' ? xo = 'X' : xo = 'O';
             sq.textContent = xo;
     }
 
-    switch(event.target.id) {       
+    let target = event.target.id;
+
+    switch(target) {       
         case 'r1c1':
             squareCheck('r1c1') === false ? displayText('Already Selected') : (pickSquare('r1c1', getTick()), createMark(r1c1), markSwitch());
         break;
@@ -142,7 +139,7 @@ const displayText = (text) => {
 }
 
 const game = function() {
-    const {displayBoard, winKey, markSwitch, getCache} = Gameboard;
+    const {displayBoard, winKey, markSwitch} = Gameboard;
 
     const boardDom = document.querySelector('#gameboard');
     const display = document.querySelector('#display');
@@ -194,7 +191,7 @@ const game = function() {
 
 const resetGame = () => {
     Gameboard.resetBoard()
-    Gameboard.addCacheReset()
+    displayText('');
     const squareList = document.querySelectorAll('.square');
     squareList.forEach((square) => square.textContent = '');
 };
