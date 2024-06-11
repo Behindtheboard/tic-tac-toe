@@ -193,6 +193,7 @@ h2 {
 
 input {
     background-color: lightgray;
+    height: 30px;
     border: none;
 }
 

@@ -17,12 +17,29 @@ const Gameboard = (function () {
     
     const pickSquare = function(square, mark) {
         if (square.includes('r1') === true && rowOne.includes(square) === true) {
+            console.log('hit1')
             rowOne[rowOne.indexOf(square)] = mark;
         } else if (square.includes('r2') === true && rowTwo.includes(square) === true) {
+            console.log('hit1')
             rowTwo[rowTwo.indexOf(square)] =  mark;
         } else if (square.includes('r3') === true && rowThree.includes(square) === true) {
+            console.log('hit1')
             rowThree[rowThree.indexOf(square)] =  mark;
         } else {
+            console.log("shouldn't hit")
+        }
+    }
+
+    const squareCheck = function(square) {
+        if (square.includes('r1') === true && rowOne.includes(square) === true) {
+            return true;
+        } else if (square.includes('r2') === true && rowTwo.includes(square) === true) {
+            return true;
+        } else if (square.includes('r3') === true && rowThree.includes(square) === true) {
+            return true;
+        } else {
+            console.log("shouldn't hit")
+
             return false;
         }
     }
@@ -57,12 +74,16 @@ const Gameboard = (function () {
     }
     const getTick = () => tick;
 
+    let cacheReset = 0;
+    const addCacheReset = () => ++cacheReset;
+    const getCache = () => cacheReset;
 
-    return {displayBoard, pickSquare, winKey, resetBoard, getTick, markSwitch, rowOne}
+    return {displayBoard, pickSquare, winKey, resetBoard, getTick, 
+        markSwitch, addCacheReset, getCache, squareCheck}
 })();
 
 const selectSquare = function (event) {
-    const {pickSquare, getTick, markSwitch} = Gameboard;
+    const {pickSquare, getTick, markSwitch, squareCheck} = Gameboard;
 
     let xo;
 
@@ -71,49 +92,67 @@ const selectSquare = function (event) {
             sq.textContent = xo;
     }
 
-    const displayText = (text) => {
-        display.textContent = text;
-    }
-
     switch(event.target.id) {       
         case 'r1c1':
-            pickSquare('r1c1', getTick()) === false ? displayText('Already Selected') : (createMark(r1c1), markSwitch());
+            squareCheck('r1c1') === false ? displayText('Already Selected') : (pickSquare('r1c1', getTick()), createMark(r1c1), markSwitch());
         break;
         case 'r1c2':
-            pickSquare('r1c2', getTick()) === false ? displayText('Already Selected') : (createMark(r1c2), markSwitch());
+            squareCheck('r1c2') === false ? displayText('Already Selected') : (pickSquare('r1c2', getTick()), createMark(r1c2), markSwitch());
         break;
         case 'r1c3':
-            pickSquare('r1c3', getTick()) === false ? displayText('Already Selected') : (createMark(r1c3), markSwitch());
+            squareCheck('r1c3') === false ? displayText('Already Selected') : (pickSquare('r1c3', getTick()), createMark(r1c3), markSwitch());
         break;
         case 'r2c1':
-            pickSquare('r2c1', getTick()) === false ? displayText('Already Selected') : (createMark(r2c1), markSwitch());
+            squareCheck('r2c1') === false ? displayText('Already Selected') : (pickSquare('r2c1', getTick()), createMark(r2c1), markSwitch());
         break;
         case 'r2c2':
-            pickSquare('r2c2', getTick()) === false ? displayText('Already Selected') : (createMark(r2c2), markSwitch());
+            squareCheck('r2c2') === false ? displayText('Already Selected') : (pickSquare('r2c2', getTick()), createMark(r2c2), markSwitch());
         break;
         case 'r2c3':
-            pickSquare('r2c3', getTick()) === false ? displayText('Already Selected') : (createMark(r2c3), markSwitch());
+            squareCheck('r2c3') === false ? displayText('Already Selected') : (pickSquare('r2c3', getTick()), createMark(r2c3), markSwitch());
         break;
         case 'r3c1':
-            pickSquare('r3c1', getTick()) === false ? displayText('Already Selected') : (createMark(r3c1), markSwitch());
+            squareCheck('r3c1') === false ? displayText('Already Selected') : (pickSquare('r3c1', getTick()), createMark(r3c1), markSwitch());
         break;
         case 'r3c2':
-            pickSquare('r3c2', getTick()) === false ? displayText('Already Selected') : (createMark(r3c2), markSwitch());
+            squareCheck('r3c2') === false ? displayText('Already Selected') : (pickSquare('r3c2', getTick()), createMark(r3c2), markSwitch());
         break;
         case 'r3c3':
-            pickSquare('r3c3', getTick()) === false ? displayText('Already Selected') : (createMark(r3c3), markSwitch());
+            squareCheck('r3c3') === false ? displayText('Already Selected') : (pickSquare('r3c3', getTick()), createMark(r3c3), markSwitch());
         break;
     }
 }
 
+const playerDisplay = function() {
+    const playerXname = document.querySelector('#playerXname')
+    const playerOname = document.querySelector('#playerOname')
+    if (Gameboard.getTick() === 'x') {
+        if (playerXname.value !== '') {
+            return `${playerXname.value}`;
+        } else {
+            return  'X';
+        }
+    } else {
+        if (playerOname.value !== '') {
+            return `${playerOname.value}`;
+        } else {
+            return  'O';
+        }
+    }
+}
+
+const displayText = (text) => {
+    display.textContent = text;
+}
+
 const game = function() {
-    const {displayBoard, winKey, markSwitch, getTick} = Gameboard;
+    const {displayBoard, winKey, markSwitch, getCache} = Gameboard;
 
     const boardDom = document.querySelector('#gameboard');
     const display = document.querySelector('#display');
     const resetGameSection = document.querySelector('#reset-game-section');
     const resetButton = document.createElement('button');
-
+    
     const r1c1 = document.querySelector('#r1c1');
     const r1c2 = document.querySelector('#r1c2');
     const r1c3 = document.querySelector('#r1c3');
@@ -124,41 +163,71 @@ const game = function() {
     const r3c2 = document.querySelector('#r3c2');
     const r3c3 = document.querySelector('#r3c3');
 
-    display.textContent = "X goes first!";
+    const showResetButton = function() {
+        resetButton.setAttribute('id', 'reset-button');
+        resetButton.textContent = 'Reset Game?';
+        resetGameSection.appendChild(resetButton);
+    }
+
+    resetGameSection.innerHTML = '';
+
+    displayText("X goes first!");
 
     boardDom.addEventListener('click', (event) => {
-        display.textContent = "";
+        displayText("");
+
         if (winKey() !== true) {
 
             selectSquare(event);
 
             if (winKey() === true) {
                 markSwitch();
-                display.textContent = `${getTick() === 'x' ? xo = 'X' : xo = 'O'} wins!`;
+                displayText(`${playerDisplay()} wins!`);
 
-                resetButton.setAttribute('id', 'reset-button');
-                resetButton.textContent = 'Reset Game?';
-                resetGameSection.appendChild(resetButton);
-            } else if (Gameboard.displayBoard().join().includes('r') === false) {
-                display.textContent = "Tie...";
+                showResetButton();                
+            } else if (displayBoard().join().includes('r') === false) {
+                displayText("Tie...");
 
-                resetButton.setAttribute('id', 'reset-button');
-                resetButton.textContent = 'Reset Game?';
-                resetGameSection.appendChild(resetButton);
+                showResetButton();
             }
-        }
+        }        
     });
 
-    resetButton.addEventListener('click', () => location.reload());        
-}
+    resetButton.addEventListener('click', () => resetGame()); 
+} 
+
+const domInit = function() {
+    boardDom.addEventListener('click', (event) => {
+        displayText("");
+
+        if (winKey() !== true) {
+
+            selectSquare(event);
+
+            if (winKey() === true) {
+                markSwitch();
+                displayText(`${playerDisplay()} wins!`);
+
+                showResetButton();                
+            } else if (displayBoard().join().includes('r') === false) {
+                displayText("Tie...");
+
+                showResetButton();
+            }
+        }        
+    });
+
+    resetButton.addEventListener('click', () => resetGame()); 
+} 
+
+
+// location.reload()
 
 const resetGame = () => {
     Gameboard.resetBoard()
-    console.log(Gameboard.displayBoard())
-    console.log(Gameboard.rowOne);
-    const squareList = document.querySelectorAll('.square')
+    Gameboard.addCacheReset()
+    const squareList = document.querySelectorAll('.square');
     squareList.forEach((square) => square.textContent = '');
-    game();
 };
 
 game();
