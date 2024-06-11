@@ -196,7 +196,8 @@ input {
     border: none;
 }
 
-#gameboard-section, #display-section, #header, #playerInfo, #playerNames {
+#gameboard-section, #display-section, #header
+, #playerInfo, #playerNames, #reset-game-section {
     display: flex;
     justify-content: center;
 }
@@ -238,11 +239,12 @@ input {
 
 #display {
     height: 30px;
-    width: 200px;
+    width: 250px;
     background-color: lightgray;
     font-size: 2rem;
     margin-bottom: 20px;
     border: 3px dashed black;
+    text-align: center;
 }
 
 #r1c1 {
@@ -305,4 +307,8 @@ input {
 #r2 {
     grid-column: 1 / span 5;
     grid-row: 4;
+}
+
+#reset-button {
+    margin-top: 20px;
 }

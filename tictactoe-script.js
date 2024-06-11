@@ -4,11 +4,17 @@ const Gameboard = (function () {
     const displayBoard = () => gameBoardArray;
 
     const resetBoard = function() {
-        rowOne = ['r1c1','r1c2','r1c3']
-        rowTwo = ['r2c1','r2c2','r2c3']
-        rowThree = ['r3c1','r3c2','r3c3'];
+        rowOne[0] = 'r1c1'
+        rowOne[1] = 'r1c2'
+        rowOne[2] = 'r1c3'
+        rowTwo[0] = 'r2c1'
+        rowTwo[1] = 'r2c2'
+        rowTwo[2] = 'r2c3'
+        rowThree[0] = 'r3c1'
+        rowThree[1] = 'r3c2'
+        rowThree[2] = 'r3c3'
     }
-
+    
     const pickSquare = function(square, mark) {
         if (square.includes('r1') === true && rowOne.includes(square) === true) {
             rowOne[rowOne.indexOf(square)] = mark;
@@ -49,25 +55,11 @@ const Gameboard = (function () {
             tick = 'x';
         }
     }
-
     const getTick = () => tick;
 
-    return {displayBoard, pickSquare, winKey, resetBoard, getTick, markSwitch}
+
+    return {displayBoard, pickSquare, winKey, resetBoard, getTick, markSwitch, rowOne}
 })();
-
-const player = function(name) {
-    let mark = ' ';
-    const chooseMark = (pick) => mark = `${pick}`;
-    const getMark = () => mark;
-
-    return {name, getMark, chooseMark};
-};
-
-const resetGame = () => {
-    Gameboard.resetBoard()
-    game();
-};
-
 
 const selectSquare = function (event) {
     const {pickSquare, getTick, markSwitch} = Gameboard;
@@ -83,43 +75,44 @@ const selectSquare = function (event) {
         display.textContent = text;
     }
 
-    switch(event.target.id) {
-        
+    switch(event.target.id) {       
         case 'r1c1':
-            pickSquare('r1c1', getTick()) === false ? displayText('already used') : createMark(r1c1), markSwitch();
+            pickSquare('r1c1', getTick()) === false ? displayText('Already Selected') : createMark(r1c1), markSwitch();
         break;
         case 'r1c2':
-            pickSquare('r1c2', getTick()) === false ? displayText('already used') : createMark(r1c2), markSwitch();
+            pickSquare('r1c2', getTick()) === false ? displayText('Already Selected') : createMark(r1c2), markSwitch();
         break;
         case 'r1c3':
-            pickSquare('r1c3', getTick()) === false ? displayText('already used') : createMark(r1c3), markSwitch();
+            pickSquare('r1c3', getTick()) === false ? displayText('Already Selected') : createMark(r1c3), markSwitch();
         break;
         case 'r2c1':
-            pickSquare('r2c1', getTick()) === false ? displayText('already used') : createMark(r2c1), markSwitch();
+            pickSquare('r2c1', getTick()) === false ? displayText('Already Selected') : createMark(r2c1), markSwitch();
         break;
         case 'r2c2':
-            pickSquare('r2c2', getTick()) === false ? displayText('already used') : createMark(r2c2), markSwitch();
+            pickSquare('r2c2', getTick()) === false ? displayText('Already Selected') : createMark(r2c2), markSwitch();
         break;
         case 'r2c3':
-            pickSquare('r2c3', getTick()) === false ? displayText('already used') : createMark(r2c3), markSwitch();
+            pickSquare('r2c3', getTick()) === false ? displayText('Already Selected') : createMark(r2c3), markSwitch();
         break;
         case 'r3c1':
-            pickSquare('r3c1', getTick()) === false ? displayText('already used') : createMark(r3c1), markSwitch();
+            pickSquare('r3c1', getTick()) === false ? displayText('Already Selected') : createMark(r3c1), markSwitch();
         break;
         case 'r3c2':
-            pickSquare('r3c2', getTick()) === false ? displayText('already used') : createMark(r3c2), markSwitch();
+            pickSquare('r3c2', getTick()) === false ? displayText('Already Selected') : createMark(r3c2), markSwitch();
         break;
         case 'r3c3':
-            pickSquare('r3c3', getTick()) === false ? displayText('already used') : createMark(r3c3), markSwitch();
+            pickSquare('r3c3', getTick()) === false ? displayText('Already Selected') : createMark(r3c3), markSwitch();
         break;
     }
 }
 
 const game = function() {
-    const {displayBoard, winKey, markSwitch, getTick} = Gameboard;
-    
+    const {winKey, markSwitch, getTick} = Gameboard;
+
     const boardDom = document.querySelector('#gameboard');
-    const display = document.querySelector('#display')
+    const display = document.querySelector('#display');
+    const resetGameSection = document.querySelector('#reset-game-section');
+    const resetButton = document.createElement('button');
 
     const r1c1 = document.querySelector('#r1c1');
     const r1c2 = document.querySelector('#r1c2');
@@ -131,18 +124,36 @@ const game = function() {
     const r3c2 = document.querySelector('#r3c2');
     const r3c3 = document.querySelector('#r3c3');
 
+    display.textContent = "X goes first!"
+
     boardDom.addEventListener('click', (event) => {
         if (winKey() !== true) {
-            console.log('hit')
+
+            console.log(Gameboard.rowOne);
             selectSquare(event);
+
             if (winKey() === true) {
                 markSwitch();
                 display.textContent = `${getTick() === 'x' ? xo = 'X' : xo = 'O'} wins!`;
-                
+                console.log(Gameboard.rowOne);
+
+                resetButton.setAttribute('id', 'reset-button');
+                resetButton.textContent = 'Reset Game?';
+                resetGameSection.appendChild(resetButton);
             }
-        }   
+        }
     });
 
+    resetButton.addEventListener('click', () => location.reload());        
 }
+
+const resetGame = () => {
+    Gameboard.resetBoard()
+    console.log(Gameboard.displayBoard())
+    console.log(Gameboard.rowOne);
+    const squareList = document.querySelectorAll('.square')
+    squareList.forEach((square) => square.textContent = '');
+    game();
+};
 
 game();
