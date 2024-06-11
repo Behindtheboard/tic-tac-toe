@@ -11,13 +11,10 @@ const Gameboard = (function () {
 
     const pickSquare = function(square, mark) {
         if (square.includes('r1') === true && rowOne.includes(square) === true) {
-            markSwitch()
             rowOne[rowOne.indexOf(square)] = mark;
         } else if (square.includes('r2') === true && rowTwo.includes(square) === true) {
-            markSwitch()
             rowTwo[rowTwo.indexOf(square)] =  mark;
         } else if (square.includes('r3') === true && rowThree.includes(square) === true) {
-            markSwitch()
             rowThree[rowThree.indexOf(square)] =  mark;
         } else {
             return false;
@@ -44,11 +41,9 @@ const Gameboard = (function () {
         }
     }
 
-    let tick;
+    let tick = 'x';
     const markSwitch = function() {
-        if (tick === undefined) {
-            tick = 'x';
-        } else if (tick === 'x') {
+        if (tick === 'x') {
             tick = 'o';
         } else if (tick === 'o') {
             tick = 'x';
@@ -57,7 +52,7 @@ const Gameboard = (function () {
 
     const getTick = () => tick;
 
-    return {displayBoard, pickSquare, winKey, resetBoard, getTick}
+    return {displayBoard, pickSquare, winKey, resetBoard, getTick, markSwitch}
 })();
 
 const player = function(name) {
@@ -74,17 +69,9 @@ const resetGame = () => {
     yesNo === "y" ? game() : alert('bye')
 };
 
-const game = function(event) {
-
-    if (Gameboard.winKey() === true) {
-        alert(`${Gameboard.getTick()} wins!`)
-    } else {
-        selectSquare(event)
-    }
-}
 
 const selectSquare = function (event) {
-    const {pickSquare, getTick} = Gameboard;
+    const {pickSquare, getTick, markSwitch} = Gameboard;
 
     let xo;
 
@@ -93,57 +80,69 @@ const selectSquare = function (event) {
             sq.textContent = xo;
     }
 
+    const displayText = (text) => {
+        display.textContent = text;
+    }
+
     switch(event.target.id) {
         
         case 'r1c1':
-            pickSquare('r1c1', getTick()) === false ? alert('already used') : createMark(r1c1);
+            pickSquare('r1c1', getTick()) === false ? displayText('already used') : createMark(r1c1), markSwitch();
         break;
         case 'r1c2':
-            pickSquare('r1c2', getTick()) === false ? alert('already used') : createMark(r1c2);
+            pickSquare('r1c2', getTick()) === false ? displayText('already used') : createMark(r1c2), markSwitch();
         break;
         case 'r1c3':
-            pickSquare('r1c3', getTick()) === false ? alert('already used') : createMark(r1c3);
+            pickSquare('r1c3', getTick()) === false ? displayText('already used') : createMark(r1c3), markSwitch();
         break;
         case 'r2c1':
-            pickSquare('r2c1', getTick()) === false ? alert('already used') : createMark(r2c1);
+            pickSquare('r2c1', getTick()) === false ? displayText('already used') : createMark(r2c1), markSwitch();
         break;
         case 'r2c2':
-            pickSquare('r2c2', getTick()) === false ? alert('already used') : createMark(r2c2);
+            pickSquare('r2c2', getTick()) === false ? displayText('already used') : createMark(r2c2), markSwitch();
         break;
         case 'r2c3':
-            pickSquare('r2c3', getTick()) === false ? alert('already used') : createMark(r2c3);
+            pickSquare('r2c3', getTick()) === false ? displayText('already used') : createMark(r2c3), markSwitch();
         break;
         case 'r3c1':
-            pickSquare('r3c1', getTick()) === false ? alert('already used') : createMark(r3c1);
+            pickSquare('r3c1', getTick()) === false ? displayText('already used') : createMark(r3c1), markSwitch();
         break;
         case 'r3c2':
-            pickSquare('r3c2', getTick()) === false ? alert('already used') : createMark(r3c2);
+            pickSquare('r3c2', getTick()) === false ? displayText('already used') : createMark(r3c2), markSwitch();
         break;
         case 'r3c3':
-            pickSquare('r3c3', getTick()) === false ? alert('already used') : createMark(r3c3);
+            pickSquare('r3c3', getTick()) === false ? displayText('already used') : createMark(r3c3), markSwitch();
         break;
     }
 }
 
+const game = function(event) {
 
-const boardDom = document.querySelector('#gameboard');
-const square = document.querySelector('.square')
+    const boardDom = document.querySelector('#gameboard');
+    const square = document.querySelector('.square')
+    const display = document.querySelector('#display')
 
-const r1c1 = document.querySelector('#r1c1');
-const r1c2 = document.querySelector('#r1c2');
-const r1c3 = document.querySelector('#r1c3');
-const r2c1 = document.querySelector('#r2c1');
-const r2c2 = document.querySelector('#r2c2');
-const r2c3 = document.querySelector('#r2c3');
-const r3c1 = document.querySelector('#r3c1');
-const r3c2 = document.querySelector('#r3c2');
-const r3c3 = document.querySelector('#r3c3');
+    const r1c1 = document.querySelector('#r1c1');
+    const r1c2 = document.querySelector('#r1c2');
+    const r1c3 = document.querySelector('#r1c3');
+    const r2c1 = document.querySelector('#r2c1');
+    const r2c2 = document.querySelector('#r2c2');
+    const r2c3 = document.querySelector('#r2c3');
+    const r3c1 = document.querySelector('#r3c1');
+    const r3c2 = document.querySelector('#r3c2');
+    const r3c3 = document.querySelector('#r3c3');
 
-boardDom.addEventListener('click', (event) =>{
-    if (Gameboard.displayBoard().join().includes('r') === true) {
-        selectSquare(event);
-    }
+    boardDom.addEventListener('click', (event) =>{
+        const {displayBoard, winKey, markSwitch, getTick} = Gameboard;
+        if (winKey() === true) {
+        } else if (displayBoard().join().includes('r') === true) {
+            selectSquare(event);
+        }
+    });
+
     if (Gameboard.winKey() === true) {
-        alert(`${Gameboard.getTick()} wins!`)
-    } 
-});
+        display.textContent = `${getTick() === 'x' ? xo = 'X' : xo = 'O'} wins!`;
+    }
+}
+
+game();
