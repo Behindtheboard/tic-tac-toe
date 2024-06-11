@@ -25,8 +25,6 @@ const Gameboard = (function () {
         } else if (square.includes('r3') === true && rowThree.includes(square) === true) {
             console.log('hit1')
             rowThree[rowThree.indexOf(square)] =  mark;
-        } else {
-            console.log("shouldn't hit")
         }
     }
 
@@ -38,8 +36,6 @@ const Gameboard = (function () {
         } else if (square.includes('r3') === true && rowThree.includes(square) === true) {
             return true;
         } else {
-            console.log("shouldn't hit")
-
             return false;
         }
     }
@@ -195,33 +191,6 @@ const game = function() {
 
     resetButton.addEventListener('click', () => resetGame()); 
 } 
-
-const domInit = function() {
-    boardDom.addEventListener('click', (event) => {
-        displayText("");
-
-        if (winKey() !== true) {
-
-            selectSquare(event);
-
-            if (winKey() === true) {
-                markSwitch();
-                displayText(`${playerDisplay()} wins!`);
-
-                showResetButton();                
-            } else if (displayBoard().join().includes('r') === false) {
-                displayText("Tie...");
-
-                showResetButton();
-            }
-        }        
-    });
-
-    resetButton.addEventListener('click', () => resetGame()); 
-} 
-
-
-// location.reload()
 
 const resetGame = () => {
     Gameboard.resetBoard()
