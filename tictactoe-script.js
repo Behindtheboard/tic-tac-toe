@@ -7,40 +7,38 @@ const isHorizontalWinner = (symbol, board) => {
     return board.some((moves) => moves.every((move) => move === symbol))
 };
 
-const transposeBoard = (board) => {
-    return board.map((_,index) => board.map((row) => row[index]))
-}
-
 const isVerticalWinner = (symbol, board) => {
+    const transposeBoard = (board) => {
+        return board.map((_,index) => board.map((row) => row[index]))
+    }
     return transposeBoard(board).some((moves) => moves.every((move) => move === symbol))
 }
 
-const getDiagonalMoves = (board) => {
-    const diagonalMoves = [];
-    const equalBasedDiagonal = [];
-    const sumBasedDiagonal = [];
-
-    for(let row = 0; row < board.length; row++){
-        for (col = 0; col < board.length; col++) {
-        if (row === col) {
-            equalBasedDiagonal.push(board[row][col])
-        }
-        }
-    }
-
-    for(let row = 0; row < board.length; row++){
-        for (col = 0; col < board.length; col++) {
-        if (row + col === board.length -1 ) {
-            sumBasedDiagonal.push(board[row][col])
-        }
-        }
-    }
-
-    diagonalMoves.push(equalBasedDiagonal,sumBasedDiagonal);
-    return diagonalMoves;
-}
-
 const isDiagonalWinner = (symbol, board) => {
+    const getDiagonalMoves = (board) => {
+        const diagonalMoves = [];
+        const equalBasedDiagonal = [];
+        const sumBasedDiagonal = [];
+    
+        for(let row = 0; row < board.length; row++){
+            for (col = 0; col < board.length; col++) {
+            if (row === col) {
+                equalBasedDiagonal.push(board[row][col])
+            }
+            }
+        }
+    
+        for(let row = 0; row < board.length; row++){
+            for (col = 0; col < board.length; col++) {
+            if (row + col === board.length -1 ) {
+                sumBasedDiagonal.push(board[row][col])
+            }
+            }
+        }
+    
+        diagonalMoves.push(equalBasedDiagonal,sumBasedDiagonal);
+        return diagonalMoves;
+    }
     return getDiagonalMoves(board).some((moves) => moves.every((move) => move === symbol))
 }
 
@@ -76,7 +74,6 @@ const player = function (name, symbol) {
 const display = document.querySelector('#display');
 const resetGameSection = document.querySelector('#reset-game-section');
 const resetButton = document.createElement('button');
-const squares = document.querySelectorAll('.square');
 const gameboard = document.querySelector('#gameboard')
 
 const drawGrid = (n) => {
@@ -98,10 +95,31 @@ const drawGrid = (n) => {
     
 };
 
+const rows = document.querySelectorAll('.row');
+
+const displayText = (text) => {
+    display.textContent = text;
+}
+
 const board  = createBoard(3);
 const playerX = player('playerX', 'X');
 const playerO = player('playerO', 'O');
 drawGrid(3);
+
+displayText("X goes first!");
+
+gameboard.addEventListener('click', (event) => {
+    displayText("");
+    let row = (event.target.parentNode.id)
+    let col = (event.target.id)
+    
+    let symbol = 'X'
+
+    play([row,col], symbol); 
+    console.log(board);
+});
+
+
 
 
 
@@ -205,23 +223,9 @@ drawGrid(3);
 //     }
 // }
 
-// const displayText = (text) => {
-//     display.textContent = text;
-// }
 
 // const game = function() {
 //     const {displayBoard, winKey, markSwitch} = Gameboard;
-
-    
-//     const r1c1 = document.querySelector('#r1c1');
-//     const r1c2 = document.querySelector('#r1c2');
-//     const r1c3 = document.querySelector('#r1c3');
-//     const r2c1 = document.querySelector('#r2c1');
-//     const r2c2 = document.querySelector('#r2c2');
-//     const r2c3 = document.querySelector('#r2c3');
-//     const r3c1 = document.querySelector('#r3c1');
-//     const r3c2 = document.querySelector('#r3c2');
-//     const r3c3 = document.querySelector('#r3c3');
 
 //     const showResetButton = function() {
 //         resetButton.setAttribute('id', 'reset-button');
@@ -229,29 +233,8 @@ drawGrid(3);
 //         resetGameSection.appendChild(resetButton);
 //     }
 
-//     resetGameSection.innerHTML = '';
 
-//     displayText("X goes first!");
 
-//     boardDom.addEventListener('click', (event) => {
-//         displayText("");
-
-//         if (winKey() !== true) {
-
-//             selectSquare(event);
-
-//             if (winKey() === true) {
-//                 markSwitch();
-//                 displayText(`${playerDisplay()} wins!`);
-
-//                 showResetButton();                
-//             } else if (displayBoard().join().includes('r') === false) {
-//                 displayText("Tie...");
-
-//                 showResetButton();
-//             }
-//         }        
-//     });
 
 //     resetButton.addEventListener('click', () => resetGame()); 
 // } 
@@ -259,8 +242,8 @@ drawGrid(3);
 // const resetGame = () => {
 //     Gameboard.resetBoard()
 //     displayText('');
-//     const squareList = document.querySelectorAll('.square');
 //     squareList.forEach((square) => square.textContent = '');
+//     resetGameSection.innerHTML = '';
 // };
 
 // game();
