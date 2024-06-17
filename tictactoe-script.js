@@ -1,4 +1,3 @@
-
 const createBoard = (n) => {
     return [...Array(n)].map((row) => Array(n).fill(null));
 };
@@ -49,74 +48,82 @@ const isGameOver = (board) => board.every((row) => row.every((move) => !!move))
 const play = ([row,col], symbol) => {
 
     if(isGameOver(board)) {
-      console.log('Game over')
+      displayText('Game over')
       return;
     }
   
     if(board[row][col]) {
-        console.log(`Choose another position.`)
+        displayText(`Choose another position.`)
         return;
-   } else {
-      board[row][col] = player
+    } else {
+        board[row][col] = symbol
     }
   
-    if (isWinner(player,board)) {
-      console.log(`Player with ${symbol} WON!`)
+    if (isWinner(symbol, board)) {
+      displayText(`Player with ${symbol} WON!`)
     } else{
-      console.log('Go on')
+      displayText('Go on')
     }
 }
 
-const player = function (name, symbol) {
+const player = (name, symbol) => {
     return {name, symbol}
 }
+
+const currentPlayer = (() => {
+    let tick = 'X'
+    const switchPlayer = () => tick === 'X' ? tick = 'O' : tick = 'X';
+    const getSymbol = () => tick;
+    return {switchPlayer, getSymbol};
+})();
 
 const display = document.querySelector('#display');
 const resetGameSection = document.querySelector('#reset-game-section');
 const resetButton = document.createElement('button');
 const gameboard = document.querySelector('#gameboard')
 
-const drawGrid = (n) => {
-    for (let i = 0; i < n; i++) {
-        let row = document.createElement('div');
-        row.setAttribute('id',`${i}`);
-        row.classList.add('row');
-        row.textContent = '';
-        gameboard.appendChild(row);
-
-        for (let c = 0; c < n; c++) {
-            let col = document.createElement('div');
-            col.setAttribute('id',`${c}`);
-            col.classList.add('col');
-            col.textContent = '';
-            row.appendChild(col)
-        }
-    }
-    
-};
-
-const rows = document.querySelectorAll('.row');
-
 const displayText = (text) => {
     display.textContent = text;
 }
 
-const board  = createBoard(3);
+const drawGrid = (board) => {
+    for (let i = 0; i < board.length; i++) {
+        let row = document.createElement('div');
+        row.setAttribute('id',`${i}`);
+        row.classList.add('row');
+        row.textContent = ``;
+        gameboard.appendChild(row);
+
+        for (let c = 0; c < board[i].length; c++) {
+            let col = document.createElement('div');
+            col.setAttribute('id',`${i}${c}`);
+            col.classList.add('col');
+            col.textContent = ``;
+            col.addEventListener('click', () => {
+                col.textContent = `${currentPlayer.getSymbol()}`
+            })
+            row.appendChild(col)
+        }
+    };
+}
+
+const board = createBoard(3);
+drawGrid(board);
+
 const playerX = player('playerX', 'X');
 const playerO = player('playerO', 'O');
-drawGrid(3);
 
 displayText("X goes first!");
 
 gameboard.addEventListener('click', (event) => {
-    displayText("");
-    let row = (event.target.parentNode.id)
-    let col = (event.target.id)
+    let row = (event.target.id).at(0);
+    let col = (event.target.id).at(1);
+
+    let symbol = currentPlayer.getSymbol()
     
-    let symbol = 'X'
+    currentPlayer.switchPlayer()
 
     play([row,col], symbol); 
-    console.log(board);
 });
 
 
@@ -232,18 +239,16 @@ gameboard.addEventListener('click', (event) => {
 //         resetButton.textContent = 'Reset Game?';
 //         resetGameSection.appendChild(resetButton);
 //     }
-
-
-
-
-//     resetButton.addEventListener('click', () => resetGame()); 
+//     
+// resetButton.addEventListener('click', () => resetGame()); 
 // } 
-
 // const resetGame = () => {
 //     Gameboard.resetBoard()
 //     displayText('');
-//     squareList.forEach((square) => square.textContent = '');
+//     gameboard.innerHTML = '';
 //     resetGameSection.innerHTML = '';
+//     const board  = createBoard(3);
+//     drawGrid(3);
 // };
 
 // game();
