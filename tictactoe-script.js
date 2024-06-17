@@ -21,17 +21,17 @@ const isDiagonalWinner = (symbol, board) => {
     
         for(let row = 0; row < board.length; row++){
             for (col = 0; col < board.length; col++) {
-            if (row === col) {
-                equalBasedDiagonal.push(board[row][col])
-            }
+                if (row === col) {
+                    equalBasedDiagonal.push(board[row][col])
+                }
             }
         }
     
         for(let row = 0; row < board.length; row++){
             for (col = 0; col < board.length; col++) {
-            if (row + col === board.length -1 ) {
-                sumBasedDiagonal.push(board[row][col])
-            }
+                if (row + col === board.length -1 ) {
+                    sumBasedDiagonal.push(board[row][col])
+                }
             }
         }
     
@@ -49,42 +49,56 @@ const play = ([row,col], symbol) => {
 
     if(isGameOver(board)) {
       displayText('Game over')
-      return;
+      return false;
     }
   
     if(board[row][col]) {
         displayText(`Choose another position.`)
-        return;
+        return false;
     } else {
         board[row][col] = symbol
     }
   
     if (isWinner(symbol, board)) {
-      displayText(`Player with ${symbol} WON!`)
+      displayText(`${currentPlayer.symbol() === 'X' ? playerO.name : playerX.name} WON!`)
     } else{
       displayText('Go on')
     }
 }
 
+const playerXname = document.querySelector('#playerXname');
+const playerOname = document.querySelector('#playerOname');
 const player = (name, symbol) => {
     return {name, symbol}
 }
+const getPlayerX = () => playerOname.value === '' ? 'Player X' : playerXname.value;
+const getPlayerO = () => playerOname.value === '' ? 'Player O' : playerXname.value;
+const playerX = player(getPlayerX(), 'X');
+const playerO = player(getPlayerO(), 'O');
 
 const currentPlayer = (() => {
-    let tick = 'X'
-    const switchPlayer = () => tick === 'X' ? tick = 'O' : tick = 'X';
-    const getSymbol = () => tick;
-    return {switchPlayer, getSymbol};
+    let player = playerX;
+    const switchPlayer = () => player === playerX ? player = playerO : player = playerX;
+    const symbol = () => player.symbol;
+    const name = () => player.name;
+    return {switchPlayer, symbol, name}
 })();
 
 const display = document.querySelector('#display');
-const resetGameSection = document.querySelector('#reset-game-section');
-const resetButton = document.createElement('button');
-const gameboard = document.querySelector('#gameboard')
-
 const displayText = (text) => {
     display.textContent = text;
 }
+    
+const resetGameSection = document.querySelector('#reset-game-section');
+const resetButton = document.createElement('button');
+const showResetButton = function() {
+    resetButton.setAttribute('id', 'reset-button');
+    resetButton.textContent = 'Reset Game?';
+    resetGameSection.appendChild(resetButton);
+}
+
+const gameboard = document.querySelector('#gameboard')
+let board = createBoard(3);
 
 const drawGrid = (board) => {
     for (let i = 0; i < board.length; i++) {
@@ -100,155 +114,44 @@ const drawGrid = (board) => {
             col.classList.add('col');
             col.textContent = ``;
             col.addEventListener('click', () => {
-                col.textContent = `${currentPlayer.getSymbol()}`
+                let symbol = currentPlayer.symbol()
+                if (col.textContent === '' ) {
+                    col.textContent = `${symbol}`
+                }
             })
             row.appendChild(col)
         }
     };
 }
 
-const board = createBoard(3);
 drawGrid(board);
-
-const playerX = player('playerX', 'X');
-const playerO = player('playerO', 'O');
 
 displayText("X goes first!");
 
 gameboard.addEventListener('click', (event) => {
     let row = (event.target.id).at(0);
     let col = (event.target.id).at(1);
+    if (col !== undefined) {
+        let symbol = currentPlayer.symbol()
 
-    let symbol = currentPlayer.getSymbol()
-    
-    currentPlayer.switchPlayer()
-
-    play([row,col], symbol); 
+        if (isGameOver(board)) {
+            displayText('Game over')   
+        } else if (isWinner(symbol, board)) {
+            displayText(`${currentPlayer.symbol() === 'X' ? playerO.name : playerX.name} WON!`)
+        } else if(board[row][col]) {
+            displayText(`Choose another position.`)
+        } else {
+            displayText('Go on')
+            currentPlayer.switchPlayer()
+            board[row][col] = symbol
+        }
+    }
 });
 
-
-
-
-
-// const Gameboard = (function () {
-
-//     const pickSquare = function(square, mark) {
-//         if (square.includes('r1') === true && rowOne.includes(square) === true) {
-//             rowOne[rowOne.indexOf(square)] = mark;
-//         } else if (square.includes('r2') === true && rowTwo.includes(square) === true) {
-//             rowTwo[rowTwo.indexOf(square)] =  mark;
-//         } else if (square.includes('r3') === true && rowThree.includes(square) === true) {
-//             rowThree[rowThree.indexOf(square)] =  mark;
-//         }
-//     }
-
-//     const squareCheck = function(square) {
-//         if (square.includes('r1') === true && rowOne.includes(square) === true) {
-//             return true;
-//         } else if (square.includes('r2') === true && rowTwo.includes(square) === true) {
-//             return true;
-//         } else if (square.includes('r3') === true && rowThree.includes(square) === true) {
-//             return true;
-//         } else {
-//             return false;
-//         }
-//     }
-
-//     let tick = 'x';
-//     const markSwitch = function() {
-//         if (tick === 'x') {
-//             tick = 'o';
-//         } else if (tick === 'o') {
-//             tick = 'x';
-//         }
-//     }
-//     const getTick = () => tick;
-
-//     return {displayBoard, pickSquare, winKey, resetBoard, getTick, 
-//         markSwitch, squareCheck}
-// })();
-
-
-// const selectSquare = function (event) {
-//     const {pickSquare, getTick, markSwitch, squareCheck} = Gameboard;
-
-//     let xo;
-
-//     const createMark = (sq) => {
-//             getTick() === 'x' ? xo = 'X' : xo = 'O';
-//             sq.textContent = xo;
-//     }
-
-//     let target = event.target.id;
-
-//     switch(target) {       
-//         case 'r1c1':
-//             squareCheck('r1c1') === false ? displayText('Already Selected') : (pickSquare('r1c1', getTick()), createMark(r1c1), markSwitch());
-//         break;
-//         case 'r1c2':
-//             squareCheck('r1c2') === false ? displayText('Already Selected') : (pickSquare('r1c2', getTick()), createMark(r1c2), markSwitch());
-//         break;
-//         case 'r1c3':
-//             squareCheck('r1c3') === false ? displayText('Already Selected') : (pickSquare('r1c3', getTick()), createMark(r1c3), markSwitch());
-//         break;
-//         case 'r2c1':
-//             squareCheck('r2c1') === false ? displayText('Already Selected') : (pickSquare('r2c1', getTick()), createMark(r2c1), markSwitch());
-//         break;
-//         case 'r2c2':
-//             squareCheck('r2c2') === false ? displayText('Already Selected') : (pickSquare('r2c2', getTick()), createMark(r2c2), markSwitch());
-//         break;
-//         case 'r2c3':
-//             squareCheck('r2c3') === false ? displayText('Already Selected') : (pickSquare('r2c3', getTick()), createMark(r2c3), markSwitch());
-//         break;
-//         case 'r3c1':
-//             squareCheck('r3c1') === false ? displayText('Already Selected') : (pickSquare('r3c1', getTick()), createMark(r3c1), markSwitch());
-//         break;
-//         case 'r3c2':
-//             squareCheck('r3c2') === false ? displayText('Already Selected') : (pickSquare('r3c2', getTick()), createMark(r3c2), markSwitch());
-//         break;
-//         case 'r3c3':
-//             squareCheck('r3c3') === false ? displayText('Already Selected') : (pickSquare('r3c3', getTick()), createMark(r3c3), markSwitch());
-//         break;
-//     }
-// }
-
-// const playerDisplay = function() {
-//     const playerXname = document.querySelector('#playerXname')
-//     const playerOname = document.querySelector('#playerOname')
-//     if (Gameboard.getTick() === 'x') {
-//         if (playerXname.value !== '') {
-//             return `${playerXname.value}`;
-//         } else {
-//             return  'X';
-//         }
-//     } else {
-//         if (playerOname.value !== '') {
-//             return `${playerOname.value}`;
-//         } else {
-//             return  'O';
-//         }
-//     }
-// }
-
-
-// const game = function() {
-//     const {displayBoard, winKey, markSwitch} = Gameboard;
-
-//     const showResetButton = function() {
-//         resetButton.setAttribute('id', 'reset-button');
-//         resetButton.textContent = 'Reset Game?';
-//         resetGameSection.appendChild(resetButton);
-//     }
-//     
-// resetButton.addEventListener('click', () => resetGame()); 
-// } 
-// const resetGame = () => {
-//     Gameboard.resetBoard()
-//     displayText('');
-//     gameboard.innerHTML = '';
-//     resetGameSection.innerHTML = '';
-//     const board  = createBoard(3);
-//     drawGrid(3);
-// };
-
-// game();
+resetButton.addEventListener('click', () => {
+    displayText('X goes first!');
+    gameboard.innerHTML = '';
+    resetGameSection.innerHTML = '';
+    board = createBoard(3);
+    drawGrid(board);
+});
