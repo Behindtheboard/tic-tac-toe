@@ -67,11 +67,6 @@ const currentPlayer = (() => {
 const moves = (() => {
     let winState;
     const play = ([row,col], symbol) => {
-        if(isGameOver(board)) {
-            displayText('Game over')
-            winState = true;
-            return;
-        }
     
         if(board[row][col]) {
             displayText(`Choose another position.`)
@@ -80,6 +75,12 @@ const moves = (() => {
             board[row][col] = symbol
         }
     
+        if(isGameOver(board)) {
+            displayText('Game over')
+            winState = true;
+            return;
+        }
+        
         if (isWinner(symbol, board)) {
             displayText(`${currentPlayer.name()} WON!`)
             winState = true;
