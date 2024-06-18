@@ -199,7 +199,7 @@ input {
 
 #gameboard-section, #display-section, #header
 , #playerInfo, #playerNames, #reset-game-section, 
-#gameboard, .col, .row {
+#gameboard, .square, .row {
     display: flex;
     justify-content: center;
 }
@@ -220,7 +220,7 @@ input {
     flex-direction: column;
 }
 
-.col {
+.square {
     background-color: lightgrey;
     justify-content: center;
     align-items: center;

@@ -41,47 +41,56 @@ const isDiagonalWinner = (symbol, board) => {
     return getDiagonalMoves(board).some((moves) => moves.every((move) => move === symbol))
 }
 
-const isWinner = (symbol,board) => isHorizontalWinner(symbol, board) || isVerticalWinner(symbol, board) || isDiagonalWinner(symbol, board);
+const isWinner = (symbol, board) => isHorizontalWinner(symbol, board) || isVerticalWinner(symbol, board) || isDiagonalWinner(symbol, board);
  
 const isGameOver = (board) => board.every((row) => row.every((move) => !!move))
-
-const play = ([row,col], symbol) => {
-
-    if(isGameOver(board)) {
-      displayText('Game over')
-      return false;
-    }
-  
-    if(board[row][col]) {
-        displayText(`Choose another position.`)
-        return false;
-    } else {
-        board[row][col] = symbol
-    }
-  
-    if (isWinner(symbol, board)) {
-      displayText(`${currentPlayer.symbol() === 'X' ? playerO.name : playerX.name} WON!`)
-    } else{
-      displayText('Go on')
-    }
-}
 
 const playerXname = document.querySelector('#playerXname');
 const playerOname = document.querySelector('#playerOname');
 const player = (name, symbol) => {
     return {name, symbol}
 }
-const getPlayerX = () => playerOname.value === '' ? 'Player X' : playerXname.value;
-const getPlayerO = () => playerOname.value === '' ? 'Player O' : playerXname.value;
-const playerX = player(getPlayerX(), 'X');
-const playerO = player(getPlayerO(), 'O');
+const getPlayerX = () => playerXname.value === '' ? 'Player X' : `${playerXname.value}`;
+const getPlayerO = () => playerOname.value === '' ? 'Player O' : `${playerOname.value}`;
+const playerX = player(`${getPlayerX()}`, 'X');
+const playerO = player(`${getPlayerO()}`, 'O');
 
 const currentPlayer = (() => {
     let player = playerX;
     const switchPlayer = () => player === playerX ? player = playerO : player = playerX;
     const symbol = () => player.symbol;
     const name = () => player.name;
-    return {switchPlayer, symbol, name}
+    const otherName = () => player === playerX ? getPlayerO() : getPlayerX();
+    return {switchPlayer, symbol, name, otherName}
+})();
+
+const moves = (() => {
+    let winState;
+    const play = ([row,col], symbol) => {
+        if(isGameOver(board)) {
+            displayText('Game over')
+            winState = true;
+            return;
+        }
+    
+        if(board[row][col]) {
+            displayText(`Choose another position.`)
+            return;
+        } else {
+            board[row][col] = symbol
+        }
+    
+        if (isWinner(symbol, board)) {
+            displayText(`${currentPlayer.name()} WON!`)
+            winState = true;
+        } else{
+            displayText(`${currentPlayer.otherName()}'s turn`)
+        }
+    }
+
+    const getWinState = () => winState;
+    const resetWinState = () => winState = undefined;
+    return {play, getWinState, resetWinState}
 })();
 
 const display = document.querySelector('#display');
@@ -109,17 +118,26 @@ const drawGrid = (board) => {
         gameboard.appendChild(row);
 
         for (let c = 0; c < board[i].length; c++) {
-            let col = document.createElement('div');
-            col.setAttribute('id',`${i}${c}`);
-            col.classList.add('col');
-            col.textContent = ``;
-            col.addEventListener('click', () => {
+            let square = document.createElement('div');
+            square.setAttribute('id',`${i}${c}`);
+            square.classList.add('square');
+            square.textContent = ``;
+            square.addEventListener('click', (event) => {
+                let row = (event.target.id).at(0);
+                let col = (event.target.id).at(1);
                 let symbol = currentPlayer.symbol()
-                if (col.textContent === '' ) {
-                    col.textContent = `${symbol}`
+
+                if (moves.getWinState() !== true) {
+                    moves.play([row, col], symbol)
+                    square.textContent = `${symbol}`
+                    currentPlayer.switchPlayer()
+                    
+                    if (moves.getWinState() === true) {
+                    showResetButton();
+                    }
                 }
-            })
-            row.appendChild(col)
+            });
+            row.appendChild(square)
         }
     };
 }
@@ -128,30 +146,11 @@ drawGrid(board);
 
 displayText("X goes first!");
 
-gameboard.addEventListener('click', (event) => {
-    let row = (event.target.id).at(0);
-    let col = (event.target.id).at(1);
-    if (col !== undefined) {
-        let symbol = currentPlayer.symbol()
-
-        if (isGameOver(board)) {
-            displayText('Game over')   
-        } else if (isWinner(symbol, board)) {
-            displayText(`${currentPlayer.symbol() === 'X' ? playerO.name : playerX.name} WON!`)
-        } else if(board[row][col]) {
-            displayText(`Choose another position.`)
-        } else {
-            displayText('Go on')
-            currentPlayer.switchPlayer()
-            board[row][col] = symbol
-        }
-    }
-});
-
 resetButton.addEventListener('click', () => {
     displayText('X goes first!');
     gameboard.innerHTML = '';
     resetGameSection.innerHTML = '';
+    moves.resetWinState();
     board = createBoard(3);
     drawGrid(board);
 });
