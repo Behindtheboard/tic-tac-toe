@@ -110,6 +110,7 @@ const drawGrid = (board) => {
 
                     if(board[row][col]) {
                         displayText(`Choose another position.`)
+                        console.log(board)
                         return;
                     } else {
                         board[row][col] = symbol
