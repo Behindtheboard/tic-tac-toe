@@ -59,39 +59,17 @@ const currentPlayer = (() => {
     let player = playerX;
     const switchPlayer = () => player === playerX ? player = playerO : player = playerX;
     const symbol = () => player.symbol;
-    const name = () => player.name;
+    const name = () => player === playerX ? getPlayerX() : getPlayerO();
     const otherName = () => player === playerX ? getPlayerO() : getPlayerX();
     return {switchPlayer, symbol, name, otherName}
 })();
 
-const moves = (() => {
+const winCache = (() => {
     let winState;
-    const play = ([row,col], symbol) => {
-    
-        if(board[row][col]) {
-            displayText(`Choose another position.`)
-            return;
-        } else {
-            board[row][col] = symbol
-        }
-    
-        if(isGameOver(board)) {
-            displayText('Game over')
-            winState = true;
-            return;
-        }
-        
-        if (isWinner(symbol, board)) {
-            displayText(`${currentPlayer.name()} WON!`)
-            winState = true;
-        } else{
-            displayText(`${currentPlayer.otherName()}'s turn`)
-        }
-    }
-
     const getWinState = () => winState;
+    const setWinState = () => winState = true;
     const resetWinState = () => winState = undefined;
-    return {play, getWinState, resetWinState}
+    return {getWinState, resetWinState, setWinState}
 })();
 
 const display = document.querySelector('#display');
@@ -128,15 +106,34 @@ const drawGrid = (board) => {
                 let col = (event.target.id).at(1);
                 let symbol = currentPlayer.symbol()
 
-                if (moves.getWinState() !== true) {
-                    moves.play([row, col], symbol)
-                    square.textContent = `${symbol}`
-                    currentPlayer.switchPlayer()
+                if (winCache.getWinState() !== true) {
+
+                    if(board[row][col]) {
+                        displayText(`Choose another position.`)
+                        return;
+                    } else {
+                        board[row][col] = symbol
+                        square.textContent = `${symbol}`
+                        currentPlayer.switchPlayer()    
+                    }
+                
+                    if(isGameOver(board)) {
+                        displayText('Game over')
+                        winCache.setWinState();
+                    }
                     
-                    if (moves.getWinState() === true) {
+                    if (isWinner(symbol, board)) {
+                        displayText(`${currentPlayer.otherName()} WON!`)
+                        winCache.setWinState();
+                    } else{
+                        displayText(`${currentPlayer.name()}'s turn`)
+                    }
+
+                    if (winCache.getWinState() === true) {
                     showResetButton();
                     }
                 }
+                    
             });
             row.appendChild(square)
         }
@@ -145,13 +142,13 @@ const drawGrid = (board) => {
 
 drawGrid(board);
 
-displayText("X goes first!");
+displayText(`${playerX.name} goes first!`);
 
 resetButton.addEventListener('click', () => {
-    displayText('X goes first!');
+    displayText(`${playerX.name} goes first!`);
     gameboard.innerHTML = '';
     resetGameSection.innerHTML = '';
-    moves.resetWinState();
+    winCache.resetWinState();
     board = createBoard(3);
     drawGrid(board);
 });
