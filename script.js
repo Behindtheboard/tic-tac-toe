@@ -116,17 +116,17 @@ const drawGrid = (board) => {
                         square.textContent = `${symbol}`
                         currentPlayer.switchPlayer()    
                     }
-                
-                    if(isGameOver(board)) {
-                        displayText('Game over')
-                        winCache.setWinState();
-                    }
-                    
+
                     if (isWinner(symbol, board)) {
                         displayText(`${currentPlayer.otherName()} WON!`)
                         winCache.setWinState();
-                    } else{
+                    } else {
                         displayText(`${currentPlayer.name()}'s turn`)
+                    }
+                
+                    if(isGameOver(board) && (winCache.getWinState() !== true)) {
+                        displayText('Game over')
+                        winCache.setWinState();
                     }
 
                     if (winCache.getWinState() === true) {
